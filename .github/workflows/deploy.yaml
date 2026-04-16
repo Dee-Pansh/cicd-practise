@@ -23,4 +23,5 @@ jobs:
             cd /home/ubuntu/cicd-practise
             git pull
             docker compose up -d --build
+        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       
