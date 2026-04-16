@@ -4,24 +4,35 @@ on:
   push:
     branches:
       - main
-      
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
-    steps: 
+
+    steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{secrets.SSH_HOST}}
+          host: ${{ secrets.SSH_HOST }}
           username: ubuntu
-          key: ${{secrets.SSH_KEY}}
-          script:
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+
+            if [ ! -d "/home/ubuntu/cicd-practise" ]; then
+              git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git /home/ubuntu/cicd-practise
+            fi
+
             cd /home/ubuntu/cicd-practise
-            git pull
-            docker compose up -d --build
-        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      
+
+            git pull origin main
+
+            docker compose up -d --build || docker-compose up -d --build
+
+            echo "Deployment successful"
+
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
