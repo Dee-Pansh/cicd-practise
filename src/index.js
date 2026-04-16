@@ -1,8 +1,10 @@
 const express  = require("express");
 const app = express();
 
+
+
 app.get("/test",(req,res)=>{
-  res.send("hey testing completed")
+  res.send("hey testing completed , your ip : ",req.ip)
 });
 
 app.listen(3028,()=>{
